@@ -100,3 +100,10 @@ void Card::faceDown()
 {
     face_up = false;
 }
+sf::FloatRect Card::getGlobalBounds()
+{
+   if(face_up)
+       return front_sprite.getGlobalBounds();
+   else
+       return back_sprite.getGlobalBounds();
+}

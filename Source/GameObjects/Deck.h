@@ -30,7 +30,15 @@ public:
     void update();
     void handleEvent(sf::Event event, const sf::RenderWindow& window );
     void setSpacing(float spacing);
+    void setBuangDeck(Deck& buangDeck);
+
+    Card& getSelectedCard();
+    bool isCardSelected();
 private:
+    bool cardSelected;
+    Card* selected_card;
+    std::list<std::reference_wrapper<Card>>::iterator selected_card_it;
+    Deck* buangDeck;
     float rotation;
     sf::Vector2f position;
     bool isFaceUp;

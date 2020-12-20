@@ -14,6 +14,7 @@ StatePlaying::StatePlaying(Game& game)
 ,   m_TestMenu  (game.getWindow(), 50)
 ,   testCard('H',12,true)
 ,   testDeck(sf::Vector2f(20,20),0,true)
+,   testBuangDeck(sf::Vector2f(300,300),0,false)
 {
     auto b = std::make_unique<gui::Button>();
     b->setText("SETTINGS");
@@ -39,6 +40,19 @@ StatePlaying::StatePlaying(Game& game)
     }
     testDeck.openDeck();
 
+    for(int i=1;i<=13;i++)
+    {
+        Card* tmpcard = new Card('C',i,false);
+        std::string texname = std::to_string(i)+tmpcard->getKind();
+        tmpcard->setTexture(m_pGame->resHolder->textures.get(texname),
+                            m_pGame->resHolder->textures.get("back"),
+                            m_pGame->resHolder->textures.get("highlight"));
+        tmpcard->scale(0.10);
+        testBuangDeck.addCard(*tmpcard);
+    }
+    testBuangDeck.closeDeck();
+
+    testDeck.setBuangDeck(testBuangDeck);
     m_TestMenu.addWidget(std::move(b));
 }
 
@@ -50,6 +64,7 @@ void StatePlaying::handleEvent(sf::Event e)
         testCard.setTargetPosition((sf::Vector2f)sf::Mouse::getPosition(m_pGame->getWindow()));
         testDeck.faceDown();
     }
+    testDeck.handleEvent(e,m_pGame->getWindow());
 }
 
 void StatePlaying::handleInput()
@@ -60,6 +75,10 @@ void StatePlaying::handleInput()
 void StatePlaying::update(sf::Time deltaTime)
 {
     testCard.updatePosition();
+    if(testDeck.isCardSelected())
+    {
+        testDeck.getSelectedCard().setPosition((sf::Vector2f)sf::Mouse::getPosition(m_pGame->getWindow()));
+    }
     testDeck.update();
 
 }

@@ -4,8 +4,8 @@
 
 #include "Deck.h"
 
-Deck::Deck(sf::Vector2f position,float rotation, bool isFaceUp )
-: position(position),rotation(rotation),isFaceUp(isFaceUp),spacing(20)
+Deck::Deck(sf::Vector2f position,float rotation, bool isFaceUp)
+: position(position),rotation(rotation),isFaceUp(isFaceUp),spacing(20),cardSelected(false)
 {
     ;
 }
@@ -92,15 +92,53 @@ void Deck::update()
 }
 void Deck::handleEvent(sf::Event event, const sf::RenderWindow& window)
 {
-    auto it = cardlist.rbegin();
-    for(;it!=cardlist.rend();it++)
+    if(event.type == sf::Event::MouseButtonPressed)
     {
-        Card& tmp = *it;
-        if(tmp.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window)))
+        auto it = cardlist.rbegin();
+        for(;it!=cardlist.rend();it++)
         {
-            break;
+            Card& tmp = *it;
+            if(tmp.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window)))
+            {
+                tmp.setHighlight(true);
+                selected_card = &tmp;
+                cardSelected = true;
+                auto tmp = it;
+                selected_card_it = (++tmp).base();
+                break;
+            }
         }
     }
-    Card& selectedCard = *it;
-    selectedCard.setHighlight(true);
+    else if(event.type == sf::Event::MouseButtonReleased)
+    {
+        if(!cardSelected)return;
+        cardSelected = false;
+        Card& tmp = *selected_card;
+        if(EuclideanDistance(tmp.getPosition(),tmp.getTargetPosition())>=50)
+        {
+            tmp.setHighlight(false);
+            buangDeck->addCard(*selected_card);
+//            cardlist.erase(selected_card_it);
+        }
+        else
+        {
+            ;
+        }
+//        openDeck();
+    }
+
+}
+
+void Deck::setBuangDeck(Deck& buangDeck)
+{
+    this->buangDeck = &buangDeck;
+}
+
+Card& Deck::getSelectedCard()
+{
+    return *selected_card;
+}
+bool Deck::isCardSelected()
+{
+    return cardSelected;
 }

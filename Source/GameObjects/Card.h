@@ -46,13 +46,14 @@ public:
     void faceUp();
     void faceDown();
 
+    void select();
     sf::FloatRect getGlobalBounds();
 private:
     //sprites
     sf::Sprite front_sprite,back_sprite,highlight_sprite;
     sf::Vector2f targetPosition;
     bool is_highlighted;
-    bool is_selectable;
+    bool is_selected;
     bool face_up;
 
 };

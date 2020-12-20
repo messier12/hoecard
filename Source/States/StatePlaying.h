@@ -23,6 +23,7 @@ class StatePlaying : public StateBase
         gui::StackMenu m_TestMenu;
         Card testCard;
         Deck testDeck;
+        Deck testBuangDeck;
 
 
 };
