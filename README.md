@@ -1,23 +1,6 @@
-# SFML-Game-Framework
-Simple framework for SFML games and that
+# HoeCard
+Hoe and Cards become one, what do you think it is?
 
+this game is made using Hopson97 game framework
 
-Requires C++14 and SFML 2.4.1
-
-Nothing special.
-
-Features:
-
-* State/Screen system
-
-This is a system that allows you to organise different stages of the game. In other engines and frameworks, you may have seen this named as "Scene", "Stage", or "Room".
-
-* Cruddy GUI system
-
-* Animation
-
-* Some maths
-
-* file stuff
-
-* resource manager
+https://github.com/Hopson97/SFML-Game-Framework
