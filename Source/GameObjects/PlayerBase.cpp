@@ -3,3 +3,16 @@
 //
 
 #include "PlayerBase.h"
+
+
+void PlayerBase::activate()
+{
+    active = true;
+}
+void PlayerBase::deactivate() {
+    active = false;
+}
+bool PlayerBase::isActive()
+{
+    return active;
+}

@@ -9,7 +9,7 @@
 #include "../Util/Maths.h"
 #include "../ResourceManager/ResourceManager.h"
 #include <iostream>
-class Card : public NonCopyable
+class Card// : public NonCopyable
 {
 private:
     char kind;
@@ -17,6 +17,9 @@ private:
 public:
 
     Card(char kind, int value,bool face);
+
+    Card(const Card& other) = delete;
+    Card& operator=(const Card& other) = delete;
 
     Card(Card&& other) noexcept = default;
     Card& operator=(Card&& other) noexcept = default;
@@ -38,14 +41,15 @@ public:
     void setRotation(float r);
     float getRotation();
 
-    int getValue();
-    char getKind();
+    int getValue() const;
+    char getKind() const;
 
     void setTexture(const sf::Texture& front_texture, const sf::Texture& back_texture, const sf::Texture& highlight_texture);
 
     void faceUp();
     void faceDown();
 
+    bool operator == ( const Card& b);
     void select();
     sf::FloatRect getGlobalBounds();
 private:

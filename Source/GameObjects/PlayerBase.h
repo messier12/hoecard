@@ -11,12 +11,16 @@ class PlayerBase {
 protected:
 
 public:
+
+    PlayerBase(const PlayerBase& other) = delete;
+    PlayerBase& operator=(const PlayerBase& other) = delete;
     Deck deck;
     virtual void handleEvent(sf::Event e,const sf::RenderWindow& window);
     void activate();
     void deactivate();
+    bool isActive();
 private:
-    bool isActive;
+    bool active;
 
 
 };

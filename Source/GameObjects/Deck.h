@@ -15,12 +15,12 @@ class Deck : NonCopyable
 {
 public:
     Deck(sf::Vector2f position, float roation, bool isFaceUp);
-    std::list<std::reference_wrapper<Card>> cardlist;
+    std::list<Card> cardlist;
     void shuffle();
     void moveTopCardToDeck(Deck& destination);
     sf::Vector2f getPosition();
     sf::Vector2f setPosition(sf::Vector2f pos);
-    void addCard(Card& card);
+    void addCard(Card&& card);
     void render(sf::RenderTarget& renderer);
     void openDeck();
     void closeDeck();
@@ -34,6 +34,8 @@ public:
 
     Card& getSelectedCard();
     bool isCardSelected();
+
+    void toggleOpen(bool toggle);
 private:
     bool cardSelected;
     Card* selected_card;
@@ -42,6 +44,7 @@ private:
     float rotation;
     sf::Vector2f position;
     bool isFaceUp;
+    bool openToggled;
     float spacing;
 
 };

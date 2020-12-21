@@ -11,10 +11,11 @@ std::string test;
 
 StatePlaying::StatePlaying(Game& game)
 :   StateBase   (game)
-,   m_TestMenu  (game.getWindow(), 50)
+//,   m_TestMenu  (game.getWindow(), 50)
 ,   testCard('H',12,true)
 ,   testDeck(sf::Vector2f(20,20),0,true)
-,   testBuangDeck(sf::Vector2f(300,300),0,false)
+,   testBuangDeck(sf::Vector2f(400,400),0,false)
+,   buang_deck(((sf::Vector2f)m_pGame->getWindow().getSize()*0.5f), 0, true)
 {
     auto b = std::make_unique<gui::Button>();
     b->setText("SETTINGS");
@@ -23,10 +24,10 @@ StatePlaying::StatePlaying(Game& game)
 //        m_pGame->pushState<StateSetting>(*m_pGame);
     });
 
-    testCard.setTexture(m_pGame->resHolder->textures.get("12H"),
-                        m_pGame->resHolder->textures.get("back"),
-                        m_pGame->resHolder->textures.get("highlight"));
-    testCard.setTargetPosition(0,0);
+//    testCard.setTexture(m_pGame->resHolder->textures.get("12H"),
+//                        m_pGame->resHolder->textures.get("back"),
+//                        m_pGame->resHolder->textures.get("highlight"));
+//    testCard.setTargetPosition(0,0);
 //    testCard.scale(0.25);
     for(int i=1;i<=13;i++)
     {
@@ -36,9 +37,9 @@ StatePlaying::StatePlaying(Game& game)
                             m_pGame->resHolder->textures.get("back"),
                             m_pGame->resHolder->textures.get("highlight"));
         tmpCard->scale(0.10);
-        testDeck.addCard(*tmpCard);
+        testDeck.addCard(std::move(*tmpCard));
     }
-    testDeck.openDeck();
+    testDeck.toggleOpen(true);
 
     for(int i=1;i<=13;i++)
     {
@@ -48,21 +49,21 @@ StatePlaying::StatePlaying(Game& game)
                             m_pGame->resHolder->textures.get("back"),
                             m_pGame->resHolder->textures.get("highlight"));
         tmpcard->scale(0.10);
-        testBuangDeck.addCard(*tmpcard);
+        testBuangDeck.addCard(std::move(*tmpcard));
     }
     testBuangDeck.closeDeck();
 
     testDeck.setBuangDeck(testBuangDeck);
-    m_TestMenu.addWidget(std::move(b));
+//    m_TestMenu.addWidget(std::move(b));
 }
 
 void StatePlaying::handleEvent(sf::Event e)
 {
-    m_TestMenu.handleEvent(e, m_pGame->getWindow());
+//    m_TestMenu.handleEvent(e, m_pGame->getWindow());
     if(e.type==sf::Event::MouseButtonPressed)
     {
-        testCard.setTargetPosition((sf::Vector2f)sf::Mouse::getPosition(m_pGame->getWindow()));
-        testDeck.faceDown();
+        ;
+//        testDeck.faceDown();
     }
     testDeck.handleEvent(e,m_pGame->getWindow());
 }
@@ -80,6 +81,7 @@ void StatePlaying::update(sf::Time deltaTime)
         testDeck.getSelectedCard().setPosition((sf::Vector2f)sf::Mouse::getPosition(m_pGame->getWindow()));
     }
     testDeck.update();
+    testBuangDeck.update();
 
 }
 
@@ -93,4 +95,5 @@ void StatePlaying::render(sf::RenderTarget& renderer)
 //    m_TestMenu.render(renderer);
 //    testCard.render(renderer);
     testDeck.render(renderer);
+    testBuangDeck.render(renderer);
 }

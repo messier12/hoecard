@@ -5,21 +5,24 @@
 #include "Deck.h"
 
 Deck::Deck(sf::Vector2f position,float rotation, bool isFaceUp)
-: position(position),rotation(rotation),isFaceUp(isFaceUp),spacing(20),cardSelected(false)
+: position(position),rotation(rotation),isFaceUp(isFaceUp),spacing(20),cardSelected(false),openToggled(false)
 {
     ;
 }
-void Deck::addCard(Card& card)
+void Deck::addCard(Card&& card)
 {
+    if(isFaceUp)
+        card.faceUp();
+    else
+        card.faceDown();
     card.setRotation(rotation);
     card.setTargetPosition(position);
-    cardlist.push_back(card);
+    cardlist.push_back(std::move(card));
 }
 
 void Deck::moveTopCardToDeck( Deck &destination) {
-    Card& topCard = (cardlist.back());
+    destination.addCard(std::move(cardlist.back()));
     cardlist.pop_back();
-    destination.addCard(topCard);
 }
 
 void Deck::shuffle()
@@ -35,12 +38,11 @@ sf::Vector2f Deck::setPosition(sf::Vector2f pos){
 
 void Deck::render(sf::RenderTarget& renderer)
 {
-    if(!isFaceUp)
-    {
-        Card& card = cardlist.back();
-        card.render(renderer);
-        return;
-    }
+//    if(!isFaceUp)
+//    {
+//        cardlist.back().render(renderer);
+//        return;
+//    }
     for(Card& card : cardlist){
         card.render(renderer);
     }
@@ -85,6 +87,10 @@ void Deck::setSpacing(float spacing)
 
 void Deck::update()
 {
+    if(openToggled)
+    {
+        openDeck();
+    }
     for(Card& card : cardlist)
     {
         card.updatePosition();
@@ -97,14 +103,13 @@ void Deck::handleEvent(sf::Event event, const sf::RenderWindow& window)
         auto it = cardlist.rbegin();
         for(;it!=cardlist.rend();it++)
         {
-            Card& tmp = *it;
-            if(tmp.getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window)))
+            if((*it).getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window)))
             {
-                tmp.setHighlight(true);
-                selected_card = &tmp;
+                (*it).setHighlight(true);
+                selected_card = &*it;
                 cardSelected = true;
-                auto tmp = it;
-                selected_card_it = (++tmp).base();
+                auto temp = it;
+//                selected_card_it = (++temp).base();
                 break;
             }
         }
@@ -117,8 +122,9 @@ void Deck::handleEvent(sf::Event event, const sf::RenderWindow& window)
         if(EuclideanDistance(tmp.getPosition(),tmp.getTargetPosition())>=50)
         {
             tmp.setHighlight(false);
-            buangDeck->addCard(*selected_card);
-//            cardlist.erase(selected_card_it);
+            buangDeck->addCard(std::move(*selected_card));
+//            cardlist.erase(std::find(cardlist.begin(),cardlist.end(),*selected_card));
+            cardlist.remove(*selected_card);
         }
         else
         {
@@ -141,4 +147,9 @@ Card& Deck::getSelectedCard()
 bool Deck::isCardSelected()
 {
     return cardSelected;
+}
+
+void Deck::toggleOpen(bool toggle)
+{
+   openToggled = toggle;
 }

@@ -5,8 +5,11 @@
 #ifndef SFML_FRAMEWORK_PLAYERHUMAN_H
 #define SFML_FRAMEWORK_PLAYERHUMAN_H
 
+#include "PlayerBase.h"
 
-class PlayerHuman {
+class PlayerHuman : PlayerBase
+{
+    void handleEvent(sf::Event e, const sf::RenderWindow& window) override;
 
 };
 

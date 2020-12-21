@@ -59,11 +59,11 @@ float Card::getRotation()
     return front_sprite.getRotation();
 }
 
-int Card::getValue()
+int Card::getValue() const
 {
     return value;
 }
-char Card::getKind()
+char Card::getKind() const
 {
     return kind;
 }
@@ -106,4 +106,9 @@ sf::FloatRect Card::getGlobalBounds()
        return front_sprite.getGlobalBounds();
    else
        return back_sprite.getGlobalBounds();
+}
+
+bool Card::operator==(const Card& b)
+{
+   return (b.getKind()==kind)&&(b.getValue()==value);
 }
