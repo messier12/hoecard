@@ -14,10 +14,11 @@
 class Deck : NonCopyable
 {
 public:
-    Deck(sf::Vector2f position, float roation, bool isFaceUp);
-    std::list<Card> cardlist;
+    Deck(sf::Vector2f position, float rotation, bool isFaceUp);
+    std::vector<Card> cardlist;
     void shuffle();
     void moveTopCardToDeck(Deck& destination);
+    void moveCardToDeck(Deck& destination, int index);
     sf::Vector2f getPosition();
     sf::Vector2f setPosition(sf::Vector2f pos);
     void addCard(Card&& card);
@@ -35,16 +36,20 @@ public:
     Card& getSelectedCard();
     bool isCardSelected();
 
+    bool isAvailable(char kind);
+
     void toggleOpen(bool toggle);
+    void setSelectableKind(char kind);
 private:
-    bool cardSelected;
+    char selectable_kind;
+    bool card_selected;
     Card* selected_card;
     std::list<std::reference_wrapper<Card>>::iterator selected_card_it;
-    Deck* buangDeck;
+    Deck* buang_deck;
     float rotation;
     sf::Vector2f position;
-    bool isFaceUp;
-    bool openToggled;
+    bool is_face_up;
+    bool open_toggled;
     float spacing;
 
 };

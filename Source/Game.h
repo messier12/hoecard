@@ -48,6 +48,10 @@ class Game : public NonCopyable, public NonMovable
         bool m_shouldChageState = false;
         std::unique_ptr<StateBase> m_change;
 
+
+        // Game settings
+
+
 };
 
 template<typename T, typename... Args>

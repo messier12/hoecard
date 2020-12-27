@@ -26,11 +26,15 @@ class StatePlaying : public StateBase
 
     private:
 //        gui::StackMenu m_TestMenu;
+        void nextTurn();
+        void nextRound();
         Card testCard;
         Deck testDeck;
         Deck testBuangDeck;
         Deck buang_deck;
-        std::vector<PlayerBase*> player_vector;
+        int activePlayer;
+
+        std::vector<PlayerBase*> players;
 
 
 };

@@ -9,7 +9,9 @@
 
 class PlayerHuman : PlayerBase
 {
+    PlayerHuman(sf::Vector2f position, float rotation);
     void handleEvent(sf::Event e, const sf::RenderWindow& window) override;
+    void update(sf::Time deltaTime) override;
 
 };
 

@@ -112,3 +112,8 @@ bool Card::operator==(const Card& b)
 {
    return (b.getKind()==kind)&&(b.getValue()==value);
 }
+
+bool Card::isFaceUp()
+{
+    return face_up;
+}

@@ -48,6 +48,7 @@ public:
 
     void faceUp();
     void faceDown();
+    bool isFaceUp();
 
     bool operator == ( const Card& b);
     void select();
