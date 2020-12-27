@@ -50,13 +50,18 @@ sf::Vector2f Card::getTargetPosition() {
 
 void Card::setRotation(float r)
 {
-    front_sprite.setRotation(r);
-    back_sprite.setRotation(r);
-    highlight_sprite.setRotation(r);
+    float rot = r*180/acosf(-1);
+    front_sprite.setRotation(rot);
+    back_sprite.setRotation(rot);
+    highlight_sprite.setRotation(rot);
+}
+void Card::setTargetRotation(float r)
+{
+   target_rotation = r;
 }
 float Card::getRotation()
 {
-    return front_sprite.getRotation();
+    return front_sprite.getRotation()*acosf(-1)/180;
 }
 
 int Card::getValue() const
@@ -77,11 +82,16 @@ void Card::scale(float k){
 void Card::updatePosition()
 {
     float e;
-    const float k = 0.20;
+    const float k = 0.15;
     if((e=EuclideanDistance(getPosition(),targetPosition))>=0.000001)
     {
        setPosition(getPosition()+(targetPosition-getPosition())*k);
     }
+    if((e=target_rotation-getRotation())>=0.00001)
+    {
+       setRotation(getRotation()+e*k);
+    }
+
 
 //    std::cout<<"error "<<e<<" x "<<getPosition().x<<std::endl;
 }

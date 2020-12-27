@@ -1,5 +1,6 @@
 #include "StatePlaying.h"
 
+
 #include "../GUI/Button.h"
 #include "../GUI/Textbox.h"
 #include "../Game.h"
@@ -11,80 +12,72 @@ std::string test;
 
 StatePlaying::StatePlaying(Game& game)
 :   StateBase   (game)
-//,   m_TestMenu  (game.getWindow(), 50)
-,   testCard('H',12,true)
-,   testDeck(sf::Vector2f(20,20),0,true)
-,   testBuangDeck(sf::Vector2f(400,400),0,false)
 ,   buang_deck(((sf::Vector2f)m_pGame->getWindow().getSize()*0.5f), 0, true)
-,   activePlayer(0)
+,   dealer_deck(((sf::Vector2f)m_pGame->getWindow().getSize()*0.4f),0,false)
+,   active_player(0)
+,   state_sequence(0)
 {
-    auto b = std::make_unique<gui::Button>();
-    b->setText("SETTINGS");
-    b->setFunction([this]() {
-        std::cout << "Button 1 clicked!" << '\n';
-//        m_pGame->pushState<StateSetting>(*m_pGame);
-    });
+//    auto b = std::make_unique<gui::Button>();
+//    b->setText("SETTINGS");
+//    b->setFunction([this]() {
+//        std::cout << "Button 1 clicked!" << '\n';
+//    });
 
-//    testCard.setTexture(m_pGame->resHolder->textures.get("12H"),
-//                        m_pGame->resHolder->textures.get("back"),
-//                        m_pGame->resHolder->textures.get("highlight"));
-//    testCard.setTargetPosition(0,0);
-//    testCard.scale(0.25);
-    for(int i=1;i<=13;i++)
+//    players.push_back(new PlayerHuman(sf::Vector2f(0,0),acosf(-1)));
+    int window_width = m_pGame->getWindow().getSize().x;
+    int window_height= m_pGame->getWindow().getSize().y;
+    //players.push_back(new PlayerHuman(sf::Vector2f(0,window_height/2),-acosf(0)));
+    //players.push_back(new PlayerHuman(sf::Vector2f(window_width/2,0),acosf(-1)));
+    //players.push_back(new PlayerHuman(sf::Vector2f(window_width-100,window_height/2),acosf(0)));
+    //players.push_back(new PlayerHuman(sf::Vector2f(window_width/2,window_height-100),0));
+    players.push_back(new PlayerHuman(sf::Vector2f(100,window_height/2),acosf(0)));
+    players.push_back(new PlayerHuman(sf::Vector2f(window_width/2,100),acosf(-1)));
+    players.push_back(new PlayerHuman(sf::Vector2f(window_width-100,window_height/2),3*acosf(0)));
+    players.push_back(new PlayerHuman(sf::Vector2f(window_width/2,window_height-100),0));
+    for(auto player : players)
     {
-        Card* tmpCard = new Card('H',((i==1)?14:i),true);
-        std::string texname = std::to_string(i)+tmpCard->getKind();
-        tmpCard->setTexture(m_pGame->resHolder->textures.get(texname),
-                            m_pGame->resHolder->textures.get("back"),
-                            m_pGame->resHolder->textures.get("highlight"));
-        tmpCard->scale(0.10);
-        testDeck.addCard(std::move(*tmpCard));
+        player->deck.toggleOpen(true);
+        player->deck.faceUp();
+        player->deck.setBuangDeck(this->buang_deck);
     }
-    for(int i=1;i<=13;i++)
+    char kindarray[] = {'C','D','H','S'};
+    for(char i : kindarray)
     {
-        Card* tmpCard = new Card('D',((i==1)?14:i),true);
-        std::string texname = std::to_string(i)+tmpCard->getKind();
-        tmpCard->setTexture(m_pGame->resHolder->textures.get(texname),
-                            m_pGame->resHolder->textures.get("back"),
-                            m_pGame->resHolder->textures.get("highlight"));
-        tmpCard->scale(0.10);
-        testDeck.addCard(std::move(*tmpCard));
+        for(int j=1;j<=13;j++)
+        {
+            int value = (j==1)?14:j;
+            std::string texture_name = std::to_string(j)+i;
+            Card* tmp_card = new Card(i,value,true);
+            tmp_card->setTexture(m_pGame->resHolder->textures.get(texture_name)
+                                ,m_pGame->resHolder->textures.get("back")
+                                ,m_pGame->resHolder->textures.get("highlight")
+            );
+            tmp_card->scale(0.15);
+            dealer_deck.addCard(std::move(*tmp_card));
+        }
     }
-    testDeck.shuffle();
-    testDeck.toggleOpen(true);
-    testDeck.setSelectableKind(0);
-
-    for(int i=1;i<=13;i++)
-    {
-        Card* tmpcard = new Card('C',i,false);
-        std::string texname = std::to_string(i)+tmpcard->getKind();
-        tmpcard->setTexture(m_pGame->resHolder->textures.get(texname),
-                            m_pGame->resHolder->textures.get("back"),
-                            m_pGame->resHolder->textures.get("highlight"));
-        tmpcard->scale(0.10);
-        testBuangDeck.addCard(std::move(*tmpcard));
-    }
-    testBuangDeck.toggleOpen(true);
-    testBuangDeck.faceDown();
-
-    testDeck.setBuangDeck(testBuangDeck);
-//    m_TestMenu.addWidget(std::move(b));
+    dealer_deck.shuffle();
+    dealer_deck.closeDeck();
 }
 
 void StatePlaying::handleEvent(sf::Event e)
 {
 //    m_TestMenu.handleEvent(e, m_pGame->getWindow());
-    if(e.type==sf::Event::MouseButtonPressed)
+    switch(state_sequence)
     {
-        ;
-//        testDeck.faceDown();
+        case 0:
+            ;
+            break;
+        case 1:
+            players[active_player]->handleEvent(e,m_pGame->getWindow());
+            break;
+        case 2:
+            ;;;
+            break;
+        case 4:
+            ;;;;
+            break;
     }
-    testDeck.handleEvent(e,m_pGame->getWindow());
-    if(e.type == sf::Event::KeyPressed)
-        if(e.key.code == sf::Keyboard::Space)
-        {
-          testDeck.shuffle();
-        }
 }
 
 void StatePlaying::handleInput()
@@ -94,13 +87,38 @@ void StatePlaying::handleInput()
 
 void StatePlaying::update(sf::Time deltaTime)
 {
-    testCard.updatePosition();
-    if(testDeck.isCardSelected())
+    state_clock += deltaTime;
+    switch(state_sequence)
     {
-        testDeck.getSelectedCard().setPosition((sf::Vector2f)sf::Mouse::getPosition(m_pGame->getWindow()));
+        case 0:
+            if(13*4-dealer_deck.cardlist.size()>=players.size()*7)
+            {
+                state_sequence = 1;
+                break;
+            }
+            if(state_clock>sf::milliseconds(200))
+            {
+                dealer_deck.moveTopCardToDeck(players[active_player]->deck);
+                active_player ++;
+                active_player %= players.size();
+                state_clock = sf::Time::Zero;
+            }
+            break;
+        case 1:
+            ;;
+            break;
+        case 2:
+            ;;;
+            break;
+        case 4:
+            ;;;;
+            break;
     }
-    testDeck.update();
-    testBuangDeck.update();
+
+    dealer_deck.update();
+    buang_deck.update();
+    for(auto player : players)
+        player->deck.update();
 
 }
 
@@ -113,6 +131,10 @@ void StatePlaying::render(sf::RenderTarget& renderer)
 {
 //    m_TestMenu.render(renderer);
 //    testCard.render(renderer);
-    testDeck.render(renderer);
-    testBuangDeck.render(renderer);
+    dealer_deck.render(renderer);
+    buang_deck.render(renderer);
+    for(auto player : players)
+    {
+        player->deck.render(renderer);
+    }
 }

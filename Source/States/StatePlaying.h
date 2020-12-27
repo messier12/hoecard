@@ -9,7 +9,7 @@
 #include "../GameObjects/Deck.h"
 #include "../GameObjects/PlayerBase.h"
 #include "../GameObjects/PlayerHuman.h"
-#include "../GameObjects/PlayerComp.h"
+//#include "../GameObjects/PlayerComp.h"
 /**
     Game state for the main part of the game
 */
@@ -28,11 +28,11 @@ class StatePlaying : public StateBase
 //        gui::StackMenu m_TestMenu;
         void nextTurn();
         void nextRound();
-        Card testCard;
-        Deck testDeck;
-        Deck testBuangDeck;
         Deck buang_deck;
-        int activePlayer;
+        Deck dealer_deck;
+        int active_player;
+        int state_sequence;
+        sf::Time state_clock;
 
         std::vector<PlayerBase*> players;
 

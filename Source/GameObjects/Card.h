@@ -30,6 +30,7 @@ public:
     void setPosition(float x,float y);
     void setTargetPosition(sf::Vector2f pos);
     void setTargetPosition(float x,float y);
+    void setTargetRotation(float r);
     void setHighlight(bool state);
     void scale(float k);
 
@@ -57,6 +58,7 @@ private:
     //sprites
     sf::Sprite front_sprite,back_sprite,highlight_sprite;
     sf::Vector2f targetPosition;
+    float target_rotation;
     bool is_highlighted;
     bool is_selected;
     bool face_up;

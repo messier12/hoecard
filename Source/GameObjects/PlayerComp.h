@@ -7,7 +7,7 @@
 #include "PlayerBase.h"
 
 
-class PlayerComp : PlayerBase
+class PlayerComp : public PlayerBase
 {
 public:
     PlayerComp(sf::Vector2f, float);

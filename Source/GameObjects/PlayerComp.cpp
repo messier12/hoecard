@@ -8,6 +8,9 @@ void PlayerComp::handleEvent(sf::Event e, const sf::RenderWindow &window)
 {
    ;
 }
+void PlayerComp::update(sf::Time deltaTime) {
+    ;
+}
 
 void PlayerComp::pickCard()
 {

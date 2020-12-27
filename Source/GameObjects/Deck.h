@@ -34,12 +34,14 @@ public:
     void setBuangDeck(Deck& buangDeck);
 
     Card& getSelectedCard();
-    bool isCardSelected();
+    bool isCardSelected() const;
 
     bool isAvailable(char kind);
 
     void toggleOpen(bool toggle);
     void setSelectableKind(char kind);
+
+    sf::Vector2f getBoundingBox();
 private:
     char selectable_kind;
     bool card_selected;
