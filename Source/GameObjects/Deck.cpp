@@ -3,7 +3,7 @@
 //
 
 #include "Deck.h"
-
+// TODO: FIX ROTATION ANGLE ANG SHIT. USE DEGREE INSTEAD OF RADIAN.
 Deck::Deck(sf::Vector2f position,float rotation, bool isFaceUp)
 : position(position),rotation(rotation),is_face_up(isFaceUp),spacing(20),card_selected(false),open_toggled(false),selectable_kind(0)
 {
@@ -15,7 +15,7 @@ void Deck::addCard(Card&& card)
         card.faceUp();
     else
         card.faceDown();
-    card.setTargetRotation(rotation);
+    card.setRotation(this->rotation);
     card.setTargetPosition(position);
     cardlist.push_back(std::move(card));
     if(open_toggled)
@@ -100,7 +100,7 @@ void Deck::update()
     {
         if(card_selected)
         {
-            if(selected_card != &card)
+            if(&getSelectedCard() != &card)
                 card.updatePosition();
         }
         else
@@ -124,17 +124,15 @@ void Deck::handleEvent(sf::Event event, const sf::RenderWindow& window)
     }
     if(event.type == sf::Event::MouseButtonPressed)
     {
-        auto it = cardlist.rbegin();
-        for(;it!=cardlist.rend();it++)
+        for(int i = cardlist.size()-1;i>=0;i--)
         {
-            if(selectable_kind==0||selectable_kind==(*it).getKind())
+            if(selectable_kind==0||selectable_kind==cardlist[i].getKind())
             {
-                if((*it).getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window)))
+                if(cardlist[i].getGlobalBounds().contains((sf::Vector2f)sf::Mouse::getPosition(window)))
                 {
-                    (*it).setHighlight(true);
-                    selected_card = &*it;
+                    cardlist[i].setHighlight(true);
                     card_selected = true;
-//                    selected_card_it = (++temp).base();
+                    selected_card_index = i;
                     break;
                 }
             }
@@ -144,13 +142,15 @@ void Deck::handleEvent(sf::Event event, const sf::RenderWindow& window)
     {
         if(!card_selected)return;
         card_selected = false;
-        Card& tmp = *selected_card;
+        Card& tmp = cardlist[selected_card_index];
         if(EuclideanDistance(tmp.getPosition(),tmp.getTargetPosition())>=50)
         {
             tmp.setHighlight(false);
-            buang_deck->addCard(std::move(*selected_card));
-            cardlist.erase(std::find(cardlist.begin(),cardlist.end(),*selected_card));
+            buang_deck->addCard(std::move(cardlist[selected_card_index]));
+//            cardlist.erase(std::find(cardlist.begin(),cardlist.end(),*selected_card));
 //            cardlist.remove(*selected_card);
+//            cardlist.erase(selected_card_it);
+            cardlist.erase(cardlist.begin()+selected_card_index);
         }
         else
         {
@@ -160,7 +160,7 @@ void Deck::handleEvent(sf::Event event, const sf::RenderWindow& window)
     }
 
     if(card_selected)
-        selected_card->setPosition((sf::Vector2f)sf::Mouse::getPosition(window));
+        cardlist[selected_card_index].setPosition((sf::Vector2f)sf::Mouse::getPosition(window));
 
 }
 
@@ -171,7 +171,7 @@ void Deck::setBuangDeck(Deck& deck)
 
 Card& Deck::getSelectedCard()
 {
-    return *selected_card;
+    return cardlist[selected_card_index];
 }
 bool Deck::isCardSelected() const
 {
@@ -210,4 +210,8 @@ void Deck::moveCardToDeck(Deck& destination, int index)
 sf::Vector2f Deck::getBoundingBox() {
     sf::Vector2f cardsize(cardlist.back().getGlobalBounds().width,cardlist.back().getGlobalBounds().height);
     return cardlist.back().getPosition() + cardsize - cardlist.front().getPosition();
+}
+
+float Deck::getRotation(){
+    return rotation;
 }

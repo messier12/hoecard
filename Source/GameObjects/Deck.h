@@ -42,18 +42,17 @@ public:
     void setSelectableKind(char kind);
 
     sf::Vector2f getBoundingBox();
+    float getRotation();
 private:
     char selectable_kind;
     bool card_selected;
-    Card* selected_card;
-    std::list<std::reference_wrapper<Card>>::iterator selected_card_it;
+    u_int32_t selected_card_index;
     Deck* buang_deck;
     float rotation;
     sf::Vector2f position;
     bool is_face_up;
     bool open_toggled;
     float spacing;
-
 };
 
 

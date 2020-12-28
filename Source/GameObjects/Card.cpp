@@ -2,12 +2,14 @@
 // Created by dion on 16/12/2020.
 //
 
+// TODO: FIX ROTATION ANGLE ANG SHIT. USE DEGREE INSTEAD OF RADIAN.
 #include "Card.h"
 Card::Card(char kind,int value, bool face)
 :   is_highlighted(false),
     kind(kind),
     value(value),
-    face_up(face)
+    face_up(face),
+    target_rotation(0)
 {
 
 }
@@ -50,7 +52,8 @@ sf::Vector2f Card::getTargetPosition() {
 
 void Card::setRotation(float r)
 {
-    float rot = r*180/acosf(-1);
+    rotation = r;
+    float rot = rotation*180/acosf(-1);
     front_sprite.setRotation(rot);
     back_sprite.setRotation(rot);
     highlight_sprite.setRotation(rot);
@@ -61,7 +64,7 @@ void Card::setTargetRotation(float r)
 }
 float Card::getRotation()
 {
-    return front_sprite.getRotation()*acosf(-1)/180;
+    return front_sprite.getRotation()*acosf(-1)/180.f;
 }
 
 int Card::getValue() const
@@ -79,20 +82,26 @@ void Card::scale(float k){
     highlight_sprite.scale(k,k);
 }
 
+void Card::rotate(float r)
+{
+    float rot = r*180.f/acosf(-1);
+    back_sprite.rotate(rot);
+    front_sprite.rotate(rot);
+    highlight_sprite.rotate(rot);
+}
+
 void Card::updatePosition()
 {
-    float e;
     const float k = 0.15;
-    if((e=EuclideanDistance(getPosition(),targetPosition))>=0.000001)
+    if((EuclideanDistance(getPosition(),targetPosition))>=0.001)
     {
        setPosition(getPosition()+(targetPosition-getPosition())*k);
     }
-    if((e=target_rotation-getRotation())>=0.00001)
+    if((target_rotation-rotation)>=0.001)
     {
-       setRotation(getRotation()+e*k);
+       setRotation(rotation+(target_rotation-rotation)*k);
+//        rotate((target_rotation-getRotation())*k);
     }
-
-
 //    std::cout<<"error "<<e<<" x "<<getPosition().x<<std::endl;
 }
 void Card::setTexture(const sf::Texture &front_texture, const sf::Texture &back_texture,
@@ -126,4 +135,8 @@ bool Card::operator==(const Card& b)
 bool Card::isFaceUp()
 {
     return face_up;
+}
+
+float Card::getTargetRotation(){
+    return target_rotation;
 }

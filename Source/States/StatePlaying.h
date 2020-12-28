@@ -28,7 +28,10 @@ class StatePlaying : public StateBase
 //        gui::StackMenu m_TestMenu;
         void nextTurn();
         void nextRound();
+        int turn;
+
         Deck buang_deck;
+        int buang_deck_size;
         Deck dealer_deck;
         int active_player;
         int state_sequence;

@@ -40,6 +40,7 @@ public:
 
     void updatePosition();
     void setRotation(float r);
+    void rotate(float r);
     float getRotation();
 
     int getValue() const;
@@ -54,11 +55,13 @@ public:
     bool operator == ( const Card& b);
     void select();
     sf::FloatRect getGlobalBounds();
+    float getTargetRotation();
 private:
     //sprites
     sf::Sprite front_sprite,back_sprite,highlight_sprite;
     sf::Vector2f targetPosition;
     float target_rotation;
+    float rotation;
     bool is_highlighted;
     bool is_selected;
     bool face_up;
