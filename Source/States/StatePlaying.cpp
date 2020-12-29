@@ -69,7 +69,7 @@ StatePlaying::StatePlaying(Game& game)
     players[0]->deck.faceDown();
     players[2]->deck.faceDown();
 
-    background = new sf::Sprite(m_pGame->resHolder->textures.get("background"));
+    background = new sf::Sprite(m_pGame->resHolder->textures.get("table"));
 //    background
 //    background.setTexture(m_pGame->resHolder->textures.get("table"));
 //    background.setPosition(0,0);
