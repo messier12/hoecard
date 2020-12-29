@@ -10,3 +10,10 @@ the framework used as the engine for this game:
 library used to draw things in this game:
 
 +   SFML: https://www.sfml-dev.org/
+
+<div style="text-align: right"> 
+Dion Andreas Solang
+
+07211940000039
+
+</div>
