@@ -3,7 +3,6 @@
 //
 
 #include "Deck.h"
-// TODO: FIX ROTATION ANGLE ANG SHIT. USE DEGREE INSTEAD OF RADIAN.
 Deck::Deck(sf::Vector2f position,float rotation, bool isFaceUp)
 : position(position),rotation(rotation),is_face_up(isFaceUp),spacing(20),card_selected(false),open_toggled(false),selectable_kind(0)
 {
@@ -15,7 +14,7 @@ void Deck::addCard(Card&& card)
         card.faceUp();
     else
         card.faceDown();
-    card.setRotation(this->rotation);
+    card.setTargetRotation(this->rotation);
     card.setTargetPosition(position);
     cardlist.push_back(std::move(card));
     if(open_toggled)
@@ -53,11 +52,12 @@ void Deck::render(sf::RenderTarget& renderer)
 void Deck::openDeck()
 {
     int i = 0;
+    float radian_rot = rotation*acosf(-1)/180.f;
     for(Card& card : cardlist)
     {
-       sf::Vector2f openDistance = sf::Vector2f(cos(rotation),sin(rotation))*((float)spacing*i);
-       card.setTargetPosition(position+openDistance);
-       i++;
+        sf::Vector2f openDistance = sf::Vector2f(cos(radian_rot),sin(radian_rot))*((float)spacing*i);
+        card.setTargetPosition(position+openDistance);
+        i++;
     }
 }
 void Deck::closeDeck()

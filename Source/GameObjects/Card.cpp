@@ -2,7 +2,6 @@
 // Created by dion on 16/12/2020.
 //
 
-// TODO: FIX ROTATION ANGLE ANG SHIT. USE DEGREE INSTEAD OF RADIAN.
 #include "Card.h"
 Card::Card(char kind,int value, bool face)
 :   is_highlighted(false),
@@ -53,18 +52,17 @@ sf::Vector2f Card::getTargetPosition() {
 void Card::setRotation(float r)
 {
     rotation = r;
-    float rot = rotation*180/acosf(-1);
-    front_sprite.setRotation(rot);
-    back_sprite.setRotation(rot);
-    highlight_sprite.setRotation(rot);
+    front_sprite.setRotation(r);
+    back_sprite.setRotation(r);
+    highlight_sprite.setRotation(r);
 }
 void Card::setTargetRotation(float r)
 {
-   target_rotation = r;
+    target_rotation = r;
 }
 float Card::getRotation()
 {
-    return front_sprite.getRotation()*acosf(-1)/180.f;
+    return front_sprite.getRotation();//*acosf(-1)/180.f;
 }
 
 int Card::getValue() const
@@ -97,9 +95,11 @@ void Card::updatePosition()
     {
        setPosition(getPosition()+(targetPosition-getPosition())*k);
     }
-    if((target_rotation-rotation)>=0.001)
+//    if((target_rotation-getRotation())>=0.001)
     {
-       setRotation(rotation+(target_rotation-rotation)*k);
+//       setRotation(rotation+(target_rotation-rotation)*k);
+
+        setRotation(getRotation()+(target_rotation-getRotation())*k);
 //        rotate((target_rotation-getRotation())*k);
     }
 //    std::cout<<"error "<<e<<" x "<<getPosition().x<<std::endl;
