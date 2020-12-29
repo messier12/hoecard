@@ -14,6 +14,7 @@ void Deck::addCard(Card&& card)
         card.faceUp();
     else
         card.faceDown();
+
     card.setTargetRotation(this->rotation);
     card.setTargetPosition(position);
     cardlist.push_back(std::move(card));

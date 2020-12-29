@@ -39,5 +39,10 @@ class StatePlaying : public StateBase
 
         std::vector<PlayerBase*> players;
 
+        sf::Sprite* background;
+        sf::Text text_minum;
+        sf::Text text_won;
+        sf::Text text_active_player;
+
 
 };
