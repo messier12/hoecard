@@ -5,8 +5,14 @@
 #ifndef SFML_FRAMEWORK_PLAYERHUMAN_H
 #define SFML_FRAMEWORK_PLAYERHUMAN_H
 
+#include "PlayerBase.h"
 
-class PlayerHuman {
+class PlayerHuman : public PlayerBase
+{
+public:
+    PlayerHuman(sf::Vector2f position, float rotation);
+    void handleEvent(sf::Event e, const sf::RenderWindow& window) override;
+    void update(sf::Time deltaTime) override;
 
 };
 

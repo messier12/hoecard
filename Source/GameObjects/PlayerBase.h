@@ -7,16 +7,21 @@
 #include "Card.h"
 #include "Deck.h"
 
-class PlayerBase {
-protected:
-
+class PlayerBase
+{
 public:
+    PlayerBase(sf::Vector2f,float);
+
+    PlayerBase(const PlayerBase& other) = delete;
+    PlayerBase& operator=(const PlayerBase& other) = delete;
     Deck deck;
-    virtual void handleEvent(sf::Event e,const sf::RenderWindow& window);
+    virtual void handleEvent(sf::Event e,const sf::RenderWindow& window) = 0;
+    virtual void update(sf::Time deltaTime) = 0;
     void activate();
     void deactivate();
-private:
-    bool isActive;
+    bool isActive();
+protected:
+    bool active;
 
 
 };

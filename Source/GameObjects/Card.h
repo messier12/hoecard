@@ -9,7 +9,7 @@
 #include "../Util/Maths.h"
 #include "../ResourceManager/ResourceManager.h"
 #include <iostream>
-class Card : public NonCopyable
+class Card// : public NonCopyable
 {
 private:
     char kind;
@@ -17,6 +17,9 @@ private:
 public:
 
     Card(char kind, int value,bool face);
+
+    Card(const Card& other) = delete;
+    Card& operator=(const Card& other) = delete;
 
     Card(Card&& other) noexcept = default;
     Card& operator=(Card&& other) noexcept = default;
@@ -27,6 +30,7 @@ public:
     void setPosition(float x,float y);
     void setTargetPosition(sf::Vector2f pos);
     void setTargetPosition(float x,float y);
+    void setTargetRotation(float r);
     void setHighlight(bool state);
     void scale(float k);
 
@@ -36,22 +40,28 @@ public:
 
     void updatePosition();
     void setRotation(float r);
+    void rotate(float r);
     float getRotation();
 
-    int getValue();
-    char getKind();
+    int getValue() const;
+    char getKind() const;
 
     void setTexture(const sf::Texture& front_texture, const sf::Texture& back_texture, const sf::Texture& highlight_texture);
 
     void faceUp();
     void faceDown();
+    bool isFaceUp();
 
+    bool operator == ( const Card& b);
     void select();
     sf::FloatRect getGlobalBounds();
+    float getTargetRotation();
 private:
     //sprites
     sf::Sprite front_sprite,back_sprite,highlight_sprite;
     sf::Vector2f targetPosition;
+    float target_rotation;
+    float rotation;
     bool is_highlighted;
     bool is_selected;
     bool face_up;

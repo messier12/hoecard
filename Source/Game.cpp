@@ -5,7 +5,7 @@
 #include <iostream>
 
 Game::Game()
-:   m_window    ({1280, 720}, "Space Invaders")
+:   m_window    ({1000, 1000}, "Kartu Cangkul")
 {
     resHolder = &ResourceHolder::get();
     m_window.setPosition({m_window.getPosition().x, 0});

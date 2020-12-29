@@ -2,12 +2,14 @@
 // Created by dion on 16/12/2020.
 //
 
+// TODO: FIX ROTATION ANGLE ANG SHIT. USE DEGREE INSTEAD OF RADIAN.
 #include "Card.h"
 Card::Card(char kind,int value, bool face)
 :   is_highlighted(false),
     kind(kind),
     value(value),
-    face_up(face)
+    face_up(face),
+    target_rotation(0)
 {
 
 }
@@ -50,20 +52,26 @@ sf::Vector2f Card::getTargetPosition() {
 
 void Card::setRotation(float r)
 {
-    front_sprite.setRotation(r);
-    back_sprite.setRotation(r);
-    highlight_sprite.setRotation(r);
+    rotation = r;
+    float rot = rotation*180/acosf(-1);
+    front_sprite.setRotation(rot);
+    back_sprite.setRotation(rot);
+    highlight_sprite.setRotation(rot);
+}
+void Card::setTargetRotation(float r)
+{
+   target_rotation = r;
 }
 float Card::getRotation()
 {
-    return front_sprite.getRotation();
+    return front_sprite.getRotation()*acosf(-1)/180.f;
 }
 
-int Card::getValue()
+int Card::getValue() const
 {
     return value;
 }
-char Card::getKind()
+char Card::getKind() const
 {
     return kind;
 }
@@ -74,15 +82,26 @@ void Card::scale(float k){
     highlight_sprite.scale(k,k);
 }
 
+void Card::rotate(float r)
+{
+    float rot = r*180.f/acosf(-1);
+    back_sprite.rotate(rot);
+    front_sprite.rotate(rot);
+    highlight_sprite.rotate(rot);
+}
+
 void Card::updatePosition()
 {
-    float e;
-    const float k = 0.20;
-    if((e=EuclideanDistance(getPosition(),targetPosition))>=0.000001)
+    const float k = 0.15;
+    if((EuclideanDistance(getPosition(),targetPosition))>=0.001)
     {
        setPosition(getPosition()+(targetPosition-getPosition())*k);
     }
-
+    if((target_rotation-rotation)>=0.001)
+    {
+       setRotation(rotation+(target_rotation-rotation)*k);
+//        rotate((target_rotation-getRotation())*k);
+    }
 //    std::cout<<"error "<<e<<" x "<<getPosition().x<<std::endl;
 }
 void Card::setTexture(const sf::Texture &front_texture, const sf::Texture &back_texture,
@@ -106,4 +125,18 @@ sf::FloatRect Card::getGlobalBounds()
        return front_sprite.getGlobalBounds();
    else
        return back_sprite.getGlobalBounds();
+}
+
+bool Card::operator==(const Card& b)
+{
+   return (b.getKind()==kind)&&(b.getValue()==value);
+}
+
+bool Card::isFaceUp()
+{
+    return face_up;
+}
+
+float Card::getTargetRotation(){
+    return target_rotation;
 }
