@@ -73,19 +73,8 @@ void StatePlaying::handleEvent(sf::Event e)
             ;
             break;
         case 1:
-            if(e.type==sf::Event::KeyPressed)
-            {
-                if(e.key.code==sf::Keyboard::Space)
-                    nextTurn();
-                else if(e.key.code==sf::Keyboard::Return)
-                    buang_deck.moveTopCardToDeck(players[active_player]->deck);
-                else if(e.key.code==sf::Keyboard::S)
-                    players[active_player]->deck.shuffle();
-            }
-            players[active_player]->handleEvent(e,m_pGame->getWindow());
             break;
         case 2:
-
             break;
         case 4:
             ;;;;
@@ -104,62 +93,12 @@ void StatePlaying::update(sf::Time deltaTime)
     switch(state_sequence)
     {
         case 0:
-            if(13*4-dealer_deck.cardlist.size()>=players.size()*7)
-            {
-                state_sequence = 1;
-                break;
-            }
-            if(state_clock>sf::milliseconds(150))
-            {
-                dealer_deck.moveTopCardToDeck(players[active_player]->deck);
-                active_player ++;
-                active_player %= players.size();
-                state_clock = sf::Time::Zero;
-            }
             break;
         case 1:
-            if(buang_deck_size!=buang_deck.cardlist.size())
-            {
-                buang_deck_size = buang_deck.cardlist.size();
-                for(auto player : players)
-                {
-                    player->deck.setSelectableKind(buang_deck.cardlist.back().getKind());
-                }
-                nextTurn();
-            }
             break;
         case 2:
-            players[active_player]->deck.setSelectableKind(0);
-            state_sequence = 1;
             break;
         case 4:
-            //if(dealer_deck.cardlist.empty()&&(!buang_deck.cardlist.empty()))
-            //{
-            //    if(state_clock>sf::milliseconds(150))
-            //    {
-            //        buang_deck.moveTopCardToDeck(players[active_player]->deck);
-            //        state_clock = sf::Time::Zero;
-            //    }
-            //}
-            //if(buang_deck.cardlist.empty()) {
-            //    state_sequence = 2;
-            //    break;
-            //}
-            if((!players[active_player]->deck.isAvailable(buang_deck.cardlist.back().getKind()))
-                 &&(!dealer_deck.cardlist.empty()))
-            {
-                if(state_clock>sf::milliseconds(150))
-                {
-                    dealer_deck.moveTopCardToDeck(players[active_player]->deck);
-                    state_clock = sf::Time::Zero;
-                }
-                if(players[active_player]->deck.isAvailable(buang_deck.cardlist.back().getKind()))
-                {
-                    players[active_player]->deck.moveTopCardToDeck(buang_deck);
-                    state_sequence = 1;
-                    nextTurn();
-                }
-            }
             break;
     }
 
@@ -190,36 +129,11 @@ void StatePlaying::render(sf::RenderTarget& renderer)
 
 void StatePlaying::nextTurn()
 {
-    if(players.empty())return;
-    for(Card& card : players[active_player]->deck.cardlist)
-        card.setHighlight(false);
-    active_player++;
-    active_player%=players.size();
-    turn++;
-//    if(turn>=players.size())
-//        nextRound();
-//    else
-    {
-        if(!buang_deck.cardlist.empty())
-            if(!players[active_player]->deck.isAvailable(buang_deck.cardlist.back().getKind()))
-            {
-                state_sequence = 4;
-            }
-    }
+    ;
 }
+
 
 void StatePlaying::nextRound()
 {
-    if(buang_deck.cardlist.size()>=players.size())
-    {
-        auto max_card = std::max_element(buang_deck.cardlist.rbegin(),
-                                         buang_deck.cardlist.rbegin()+players.size()-1,
-                                         [](Card& a, Card&b){return a.getValue()<b.getValue();});
-        int back_step = max_card-buang_deck.cardlist.rbegin();
-        active_player -= back_step;
-        if(active_player<0)active_player += players.size();
-    }
-    players[active_player]->deck.setSelectableKind(0);
-    turn = 0;
-    state_sequence = 2;
+    ;
 }
