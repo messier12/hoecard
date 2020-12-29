@@ -54,7 +54,7 @@ StatePlaying::StatePlaying(Game& game)
     //players.push_back(new PlayerHuman(sf::Vector2f(150,window_height/2),acosf(0)));
     //players.push_back(new PlayerComp(sf::Vector2f(window_width/2,150),acosf(-1)));
     //players.push_back(new PlayerHuman(sf::Vector2f(window_width-150,window_height/2),3*acosf(0)));
-    players.push_back(new PlayerComp(sf::Vector2f(150,window_height-150),0));
+    players.push_back(new PlayerHuman(sf::Vector2f(150,window_height-150),0));
     players.push_back(new PlayerHuman(sf::Vector2f(150,150),90));
     players.push_back(new PlayerComp(sf::Vector2f(window_width-150,150),180));
     players.push_back(new PlayerHuman(sf::Vector2f(window_width-150,window_height-150),3*90));
@@ -66,8 +66,7 @@ StatePlaying::StatePlaying(Game& game)
         player->deck.setBuangDeck(this->buang_deck);
         player->activate();
     }
-    players[0]->deck.faceDown();
-    players[2]->deck.faceDown();
+    players[2]->deck.faceDown(); // computers face down
 
     background = new sf::Sprite(m_pGame->resHolder->textures.get("table"));
 //    background

@@ -25,23 +25,6 @@ void PlayerComp::pickCard()
     std::vector<int> selectables = deck.getSelectableCardIndices();
     std::random_device rd;
     std::uniform_int_distribution<int> dist(0,selectables.size()-1);
-    deck.buangCardOfIndex(dist(rd));
+    deck.buangCardOfIndex(selectables[dist(rd)]);
     deactivate();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
