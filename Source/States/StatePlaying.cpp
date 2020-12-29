@@ -4,7 +4,7 @@
 //#include "../GUI/Button.h"
 //#include "../GUI/Textbox.h"
 #include "../Game.h"
-#include "StateGame.h"
+//#include "StateGame.h"
 //#include "StateSetting.h"
 #include <iostream>
 
