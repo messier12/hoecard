@@ -5,11 +5,11 @@
 #include <iostream>
 
 Game::Game()
-:   m_window    ({1000, 1000}, "Kartu Cangkul")
+:   window    ({1000, 1000}, "Kartu Cangkul")
 {
     resHolder = &ResourceHolder::get();
-    m_window.setPosition({m_window.getPosition().x, 0});
-    m_window.setFramerateLimit(60);
+    window.setPosition({window.getPosition().x, 0});
+    window.setFramerateLimit(60);
     pushState<StatePlaying>(*this);
 
 }
@@ -26,7 +26,7 @@ void Game::run()
     auto lag      = sf::Time::Zero;
 
     //Main loop of the game
-    while (m_window.isOpen() && !m_states.empty()) {
+    while (window.isOpen() && !states.empty()) {
         auto& state = getCurrentState();
 
         //Get times
@@ -49,10 +49,10 @@ void Game::run()
         }
 
         //Render
-        m_window.clear();
-        state.render(m_window);
-        counter.draw(m_window);
-        m_window.display();
+        window.clear();
+        state.render(window);
+        counter.draw(window);
+        window.display();
 
 
         //Handle window events
@@ -64,20 +64,21 @@ void Game::run()
 //Tries to pop the current game state
 void Game::tryPop()
 {
-    if (m_shouldPop) {
-        m_shouldPop = false;
-        if (m_shouldExit) {
-            m_states.clear();
+    if (shouldPop) {
+        shouldPop = false;
+        if (shouldExit) {
+            while(!states.empty())states.pop();
+//            states.clear();
             return;
         }
-        else if (m_shouldChageState) {
-            m_shouldChageState = false;
-            m_states.pop_back();
-            pushState(std::move(m_change));
+        else if (shouldChageState) {
+            shouldChageState = false;
+            states.pop();
+            pushState(std::move(change));
             return;
         }
         
-        m_states.pop_back();
+        states.pop();
     }
 }
 
@@ -86,11 +87,11 @@ void Game::handleEvent()
 {
     sf::Event e;
 
-    while (m_window.pollEvent(e)) {
+    while (window.pollEvent(e)) {
         getCurrentState().handleEvent(e);
         switch (e.type) {
             case sf::Event::Closed:
-                m_window.close();
+                window.close();
                 break;
 
             default:
@@ -103,29 +104,29 @@ void Game::handleEvent()
 //Returns a reference to the current game state
 StateBase& Game::getCurrentState()
 {
-    return *m_states.back();
+    return *states.top();
 }
 
 void Game::pushState(std::unique_ptr<StateBase> state)
 {
-    m_states.push_back(std::move(state));
+    states.push(std::move(state));
 }
 
 //Flags a boolean for the game to pop state
 void Game::popState()
 {
-    m_shouldPop = true;
+    shouldPop = true;
 }
 
 void Game::exitGame()
 {
-    m_shouldPop = true;
-    m_shouldExit = true;
+    shouldPop = true;
+    shouldExit = true;
 }
 
 
 //on tin
 const sf::RenderWindow& Game::getWindow() const
 {
-    return m_window;
+    return window;
 }
