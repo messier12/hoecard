@@ -9,7 +9,7 @@
 #include "../GameObjects/Deck.h"
 #include "../GameObjects/PlayerBase.h"
 #include "../GameObjects/PlayerHuman.h"
-//#include "../GameObjects/PlayerComp.h"
+#include "../GameObjects/PlayerComp.h"
 /**
     Game state for the main part of the game
 */
@@ -34,7 +34,7 @@ class StatePlaying : public StateBase
         int buang_deck_size;
         Deck dealer_deck;
         int active_player;
-        int state_sequence;
+        int state_sequence; // 0: start, 1: playing, 2: minum
         sf::Time state_clock;
 
         std::vector<PlayerBase*> players;

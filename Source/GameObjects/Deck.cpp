@@ -198,11 +198,11 @@ void Deck::setSelectableKind(char kind)
     selectable_kind = kind;
 }
 
-void Deck::moveCardToDeck(Deck& destination, int index)
+void Deck::buangCardOfIndex(int index)
 {
     if(index>=0&&index<cardlist.size())
     {
-        destination.addCard(std::move(cardlist[index]));
+        buang_deck->addCard(std::move(cardlist[index]));
         cardlist.erase(cardlist.begin()+index);
     }
 }
@@ -214,4 +214,28 @@ sf::Vector2f Deck::getBoundingBox() {
 
 float Deck::getRotation(){
     return rotation;
+}
+
+int Deck::selectableKindCount() {
+    if(selectable_kind == 0)
+        return cardlist.size();
+
+    return std::count_if(cardlist.begin(),cardlist.end(),[this](Card& a){return a.getKind()==selectable_kind;});
+}
+
+std::vector<int> Deck::getSelectableCardIndices()
+{
+    if(selectable_kind == 0)
+    {
+            std::vector<int> ret(cardlist.size());
+            std::iota(ret.begin(),ret.end(),0);
+            return ret;
+    }
+    std::vector<int> ret;
+    for(int i=0;i<cardlist.size();i++)
+        if(cardlist[i].getKind() == selectable_kind)
+            ret.push_back(i);
+
+    return ret;
+
 }

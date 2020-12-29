@@ -18,7 +18,7 @@ public:
     std::vector<Card> cardlist;
     void shuffle();
     void moveTopCardToDeck(Deck& destination);
-    void moveCardToDeck(Deck& destination, int index);
+    void buangCardOfIndex(int index);
     sf::Vector2f getPosition();
     sf::Vector2f setPosition(sf::Vector2f pos);
     void addCard(Card&& card);
@@ -40,6 +40,10 @@ public:
 
     void toggleOpen(bool toggle);
     void setSelectableKind(char kind);
+    int selectableKindCount();
+
+    std::vector<int> getSelectableCardIndices();
+
 
     sf::Vector2f getBoundingBox();
     float getRotation();

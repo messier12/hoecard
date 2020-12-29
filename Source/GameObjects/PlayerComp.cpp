@@ -3,19 +3,45 @@
 //
 
 #include "PlayerComp.h"
+#include <algorithm>
+#include <random>
 
-void PlayerComp::handleEvent(sf::Event e, const sf::RenderWindow &window)
+PlayerComp::PlayerComp(sf::Vector2f pos, float rot)
+    :PlayerBase(pos,rot)
 {
    ;
 }
+void PlayerComp::handleEvent(sf::Event e, const sf::RenderWindow &window)
+{
+    pickCard();
+}
 void PlayerComp::update(sf::Time deltaTime) {
-    ;
+    deck.update();
 }
 
 void PlayerComp::pickCard()
 {
-   for(auto& cards : deck.cardlist)
-   {
-        ;
-   }
+    if(!active)return;
+    std::vector<int> selectables = deck.getSelectableCardIndices();
+    std::random_device rd;
+    std::uniform_int_distribution<int> dist(0,selectables.size()-1);
+    deck.buangCardOfIndex(dist(rd));
+    deactivate();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
